@@ -1,5 +1,5 @@
 services:
-  postgres:
+  db:
     image: postgres:17.6
     container_name: albergues_db
     environment:
@@ -28,7 +28,7 @@ services:
     networks:
       - albergues_net
     depends_on:
-      postgres:
+      db:
         condition: service_healthy
 
 networks:
