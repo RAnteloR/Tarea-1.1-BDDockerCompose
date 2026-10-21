@@ -45,10 +45,10 @@ docker compose exec db psql -U usuario -d albergues -c "SELECT count(*) FROM alb
 
 | Paso | Comando | Resultado obtenido |
 |------|---------|--------------------|
-| 1 | `docker compose up -d` y comprobar con `docker compose exec db psql -U usuario -d albergues -c "SELECT count(*) FROM albergues;"` | _Completar (esperado: 9 filas)_ |
-| 2 | Insertar un albergue nuevo desde Adminer (http://localhost:8080 → Comando SQL): `INSERT INTO albergues (nombre, concello, camino, num_plazas, precio_noche) VALUES ('Albergue Prueba', 'Lugo', 'Camino Primitivo', 20, 9.00);` | _Completar (esperado: 10 filas)_ |
-| 3 | `docker compose down` y `docker compose up -d`, y repetir el `SELECT count(*) FROM albergues;` | _Completar (esperado: 10 filas)_ |
-| 4 | `docker compose down -v` y `docker compose up -d`, y repetir el `SELECT count(*) FROM albergues;` | _Completar (esperado: 9 filas)_ |
+| 1 | `docker compose up -d` y comprobar con `docker compose exec db psql -U usuario -d albergues -c "SELECT count(*) FROM albergues;"` | 9 Filas |
+| 2 | Insertar un albergue nuevo desde Adminer (http://localhost:8080 → Comando SQL): `INSERT INTO albergues (nombre, concello, camino, num_plazas, precio_noche) VALUES ('Albergue Prueba', 'Lugo', 'Camino Primitivo', 20, 9.00);` | 10 Filas |
+| 3 | `docker compose down` y `docker compose up -d`, y repetir el `SELECT count(*) FROM albergues;` | 10 Filas |
+| 4 | `docker compose down -v` y `docker compose up -d`, y repetir el `SELECT count(*) FROM albergues;` | 9 Filas |
 
 ## ¿Por qué en el paso 4 el resultado es distinto?
 
