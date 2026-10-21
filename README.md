@@ -37,17 +37,15 @@ Base de datos de albergues del Camino de Santiago (PostgreSQL 17) con Adminer 4 
 
 ## Prueba de persistencia
 
-| Paso | Acción | Comando | Resultado esperado | Resultado obtenido |
-|------|--------|---------|--------------------|--------------------|
-| 1 | Arrancar y comprobar los datos iniciales | `docker compose up -d` y `SELECT count(*) FROM albergues;` | 9 filas | _completar_ |
-| 2 | Insertar un albergue nuevo | `INSERT INTO albergues (nombre, concello, camino, num_plazas, precio_noche) VALUES ('Albergue Prueba', 'Lugo', 'Camino Primitivo', 20, 9.00);` | 10 filas | _completar_ |
-| 3 | Parar y eliminar los contenedores (sin `-v`) | `docker compose down` | Contenedores y red eliminados, volumen conservado | _completar_ |
-| 4 | Volver a arrancar | `docker compose up -d` | Los scripts de initdb **no** se ejecutan de nuevo | _completar_ |
-| 5 | Comprobar que el dato sigue | `SELECT count(*) FROM albergues;` | 10 filas (el albergue de prueba existe) | _completar_ |
-| 6 | Borrar también el volumen | `docker compose down -v` y `docker compose up -d` | BD recreada desde los scripts | _completar_ |
-| 7 | Comprobar tras borrar el volumen | `SELECT count(*) FROM albergues;` | 9 filas (el albergue de prueba desapareció) | _completar_ |
+Comando para contar los albergues desde la terminal (alternativa a Adminer):
 
-Consulta desde terminal:
 ```bash
 docker compose exec db psql -U usuario -d albergues -c "SELECT count(*) FROM albergues;"
 ```
+
+| Paso | Comando | Resultado obtenido |
+|------|---------|--------------------|
+| 1 | `docker compose up -d` y comprobar con `docker compose exec db psql -U usuario -d albergues -c "SELECT count(*) FROM albergues;"` | _Completar (esperado: 9 filas)_ |
+| 2 | Insertar un albergue nuevo desde Adminer (http://localhost:8080 → Comando SQL): `INSERT INTO albergues (nombre, concello, camino, num_plazas, precio_noche) VALUES ('Albergue Prueba', 'Lugo', 'Camino Primitivo', 20, 9.00);` | _Completar (esperado: 10 filas)_ |
+| 3 | `docker compose down` y `docker compose up -d`, y repetir el `SELECT count(*) FROM albergues;` | _Completar (esperado: 10 filas, el dato persiste porque el volumen se conserva)_ |
+| 4 | `docker compose down -v` y `docker compose up -d`, y repetir el `SELECT count(*) FROM albergues;` | _Completar (esperado: 9 filas, el volumen se borró y se recrea desde `initbd/`)_ |
