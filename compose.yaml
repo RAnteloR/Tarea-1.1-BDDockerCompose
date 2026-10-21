@@ -8,10 +8,10 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./initbd:/docker-entrypoint-initdb.d:ro
+      - ./initbd:/docker-entrypoint-initdb.d:ro # se monta un volumen para inicializar la base de datos con scripts SQL ro= read-only
     networks:
       - albergues_net
-    healthcheck:
+    healthcheck: # se agrega un healthcheck para verificar si la base de datos está lista antes de iniciar otros servicios
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 5s
       timeout: 5s
@@ -29,10 +29,10 @@ services:
       - albergues_net
     depends_on:
       db:
-        condition: service_healthy
+        condition: service_healthy # se asegura de que Adminer solo se inicie después de que la base de datos esté lista
 
 networks:
-  albergues_net:
+  albergues_net: # se crea una red personalizada para los contenedores
 
 volumes:
   pgdata:
