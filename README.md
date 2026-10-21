@@ -43,9 +43,9 @@ Comando para contar los albergues desde la terminal (alternativa a Adminer):
 docker compose exec db psql -U usuario -d albergues -c "SELECT count(*) FROM albergues;"
 ```
 
-| Paso | Comando | Resultado obtenido |
-|------|---------|--------------------|
-| 1 | `docker compose up -d` y comprobar con `docker compose exec db psql -U usuario -d albergues -c "SELECT count(*) FROM albergues;"` | _Completar (esperado: 9 filas)_ |
-| 2 | Insertar un albergue nuevo desde Adminer (http://localhost:8080 → Comando SQL): `INSERT INTO albergues (nombre, concello, camino, num_plazas, precio_noche) VALUES ('Albergue Prueba', 'Lugo', 'Camino Primitivo', 20, 9.00);` | _Completar (esperado: 10 filas)_ |
-| 3 | `docker compose down` y `docker compose up -d`, y repetir el `SELECT count(*) FROM albergues;` | _Completar (esperado: 10 filas, el dato persiste porque el volumen se conserva)_ |
-| 4 | `docker compose down -v` y `docker compose up -d`, y repetir el `SELECT count(*) FROM albergues;` | _Completar (esperado: 9 filas, el volumen se borró y se recrea desde `initbd/`)_ |
+| Paso | Comando | Resultado obtenido | Explicación |
+|------|---------|--------------------|-------------|
+| 1 | `docker compose up -d` y comprobar con `docker compose exec db psql -U usuario -d albergues -c "SELECT count(*) FROM albergues;"` | _Completar (esperado: 9 filas)_ | Primer arranque: el volumen `pgdata` está vacío, así que PostgreSQL ejecuta los scripts de `initbd/` (`01_esquema.sql` crea la tabla y `02_datos.sql` inserta los 9 albergues). |
+| 2 | Insertar un albergue nuevo desde Adminer (http://localhost:8080 → Comando SQL): `INSERT INTO albergues (nombre, concello, camino, num_plazas, precio_noche) VALUES ('Albergue Prueba', 'Lugo', 'Camino Primitivo', 20, 9.00);` | _Completar (esperado: 10 filas)_ | El dato se escribe en la base de datos, que guarda sus ficheros en el volumen `pgdata`, no dentro del contenedor. |
+| 3 | `docker compose down` y `docker compose up -d`, y repetir el `SELECT count(*) FROM albergues;` | _Completar (esperado: 10 filas)_ | `down` elimina los contenedores y la red, pero no los volúmenes. Al volver a arrancar se reutiliza `pgdata`, que ya tiene datos, y los scripts de `initbd/` no se ejecutan de nuevo. El albergue añadido persiste. |
+| 4 | `docker compose down -v` y `docker compose up -d`, y repetir el `SELECT count(*) FROM albergues;` | _Completar (esperado: 9 filas)_ | `-v` también borra el volumen con nombre, por lo que se pierde el albergue añadido. Al arrancar, el volumen vuelve a estar vacío y PostgreSQL ejecuta otra vez los scripts de `initbd/`, que dejan solo los 9 albergues originales. Por eso el resultado es distinto al del paso 3. |
